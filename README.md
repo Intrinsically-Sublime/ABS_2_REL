@@ -1,5 +1,5 @@
-Absolute-E_2_Relative-E_post-processor
-=========================
+Absolute-E_2_Relative-E post-processor
+=================
 
 Works with Cura gcode files. (should work with other slicers but untested as they all have options for Relative)
 
