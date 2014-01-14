@@ -13,4 +13,3 @@ Run it from the command line with the following command.
 
 Note: The script creates a second gcode file marked processed.
 
-
