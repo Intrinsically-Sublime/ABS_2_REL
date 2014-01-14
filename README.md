@@ -8,7 +8,7 @@ Convert Absolute extrusion gcode to Relative extrusion
 The script is written in lua so you will need lua installed or an executable copy in the same folder as the script 
 and the slicer. 
 
-To use with Cura you will have to run it as a seperate process from the command line with the following command.
+Run it from the command line with the following command.
 `lua "ABS_2_REL.lua" "example.gcode"`
 
 Note: The script creates a second gcode file marked processed.

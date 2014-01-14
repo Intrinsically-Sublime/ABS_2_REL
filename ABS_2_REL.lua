@@ -9,7 +9,9 @@
 -- (at your option) any later version.
 -----------------------------------------------------------------------------------
 
+-- Threshold to determine if it is a retraction or E reset
 R_THRESHOLD = 8
+-- Retraction speed
 R_SPEED = 60000
 
 -- open files
@@ -26,21 +28,30 @@ for line in fin:lines() do
 	local reset_E = line:match( "G92 E0")
 	
 	-- Find M92 set E steps
-	local skip = line:match("M92+")
+	local m92 = line:match("M92+")
 	
-	-- Find ABSOLUTE E value
+	-- Find M82 set Absolute E
+	local m82 = line:match("M82")
+	
+	-- Find ABSOLUTE E value and filter out E
 	local E_value = string.match(line, "E%d+%.%d+")
-
 	if E_value then
 		current_E_value = string.match(E_value, "%d+%.%d+")
 	end
 	
-	if skip then
+	-- Ignore M92 Ennn set E steps per mm
+	if m92 then
 		fout:write(line .. "\r\n")
 		current_E_value = "0"
 
+	-- Delete G92 E0 reset E
 	elseif reset_E then
+	
+	-- Replace M82 Absolute E with M83 Relative E
+	elseif m82 then
+		fout:write("M83 \r\n")
 		
+	-- Replace Absolute E value with Relative E value
 	elseif current_E_value then
 		local E = (current_E_value - last_E_value)
 		local new_E_value = (math.floor((E*100000)+0.25))*0.00001
@@ -54,10 +65,11 @@ for line in fin:lines() do
 			fout:write( line .. "\r\n" )
 		end
 
+	-- Write out any line that did not need modifying
 	else
 		fout:write( line .. "\r\n" )
 	end
-	last_E_value = current_E_value or 0
+	last_E_value = current_E_value
 end
 
 -- done
