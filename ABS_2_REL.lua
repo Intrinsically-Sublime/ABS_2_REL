@@ -1,5 +1,5 @@
 -- ABS_2_REL.lua
--- By Sublime 2014
+-- By Sublime 2014 https://github.com/Intrinsically-Sublime
 -- Convert Cura Absolute extrusion gcode to Relative extrusion
 
 -- Licence:  GPL v3
@@ -54,7 +54,7 @@ for line in fin:lines() do
 	-- Replace Absolute E value with Relative E value
 	elseif current_E_value then
 		local E = (current_E_value - last_E_value)
-		local new_E_value = (math.floor((E*100000)+0.25))*0.00001
+		local new_E_value = (math.floor((E*100000)+0.25))*0.00001 -- Round up to the 6th digit after the decimal
 		
 		if new_E_value > 0 then
 			local line_start = string.match(line, ".-E")
@@ -69,6 +69,8 @@ for line in fin:lines() do
 	else
 		fout:write( line .. "\r\n" )
 	end
+	
+	-- Store the last E value for the next time through the loop
 	last_E_value = current_E_value
 end
 
